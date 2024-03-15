@@ -1,0 +1,46 @@
+<?xml version = "1.0" ?>
+<launch>
+
+  <arg name="name" default="default"/>
+
+  <!-- Define parameters based on the mode -->
+  <arg if="$(eval name == 'anuj')" name="x" value="3.3"/>
+  <arg if="$(eval name == 'anuj')" name="y" value="-1.5"/>
+  <arg if="$(eval name == 'anuj')" name="z" value="-0.01"/>
+  <arg if="$(eval name == 'anuj')" name="yaw" value="0.0"/>
+
+  <arg if="$(eval name == 'kavin')" name="x" value="-1.7"/>
+  <arg if="$(eval name == 'kavin')" name="y" value="0.2"/>
+  <arg if="$(eval name == 'kavin')" name="z" value="-0.01"/>
+  <arg if="$(eval name == 'kavin')" name="yaw" value="0.0"/>
+
+  <arg if="$(eval name == 'tanish')" name="x" value="-1.7"/>
+  <arg if="$(eval name == 'tanish')" name="y" value="0.2"/>
+  <arg if="$(eval name == 'tanish')" name="z" value="-0.01"/>
+  <arg if="$(eval name == 'tanish')" name="yaw" value="1.57"/>
+
+  <arg if="$(eval name == 'default')" name="x" value="-4.5"/>
+  <arg if="$(eval name == 'default')" name="y" value="1.12"/>
+  <arg if="$(eval name == 'default')" name="z" value="-0.01"/>
+  <arg if="$(eval name == 'default')" name="yaw" value="0.0"/>
+  
+  <node pkg="tf" type="static_transform_publisher" name="footprint_to_link" args="0 0 0 0 0 0 base_footprint base_link 100" />
+  
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+  
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+  
+  <param command="$(find xacro)/xacro $(find galileo_description)/urdf/rover_zed.urdf.xacro" name="robot_description"/>
+  
+  <node args="-param robot_description -urdf -model galileo -x $(arg x) -y $(arg y) -z $(arg z) -Y $(arg yaw)" name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"/>
+  
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+  <arg name="world_name" value="$(find galileo_description)/worlds/iroc_arena.world"/> 
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+  
+</launch>

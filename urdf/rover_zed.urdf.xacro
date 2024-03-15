@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="galileo">
+  <xacro:include filename="rover_core.xacro"/>
+  <xacro:include filename="rover.gazebo"/>
+  <xacro:include filename="rover.trans"/>
+  <xacro:include filename="$(find galileo_description)/urdf/zed2.xacro"/>
+
+  <link name="imu_link"></link>
+  <link name="gps_link"></link>
+  
+  <xacro:zed2 link_prefix="" 
+                joint_prefix=""/>
+
+  <link name="lidar_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.26693"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+          <cylinder radius="0.04" length="0.03"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0.0 0.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.08" length="0.05"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="camera_joint" type="fixed">
+    <origin xyz="0.31 0.0 0.14" rpy="0 ${pi/9} 0"/>
+    <parent link="base_link"/>
+    <child link="zed2_camera_center"/>
+  </joint>
+
+  <joint name="lidar_joint" type="fixed">
+    <origin xyz="0.21 0.0 0.165" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+  </joint>
+
+  <joint name="imu_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.165" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+  </joint>
+
+  <joint name="gps_joint" type="fixed">
+    <origin xyz="-0.1 0.0 0.165" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="gps_link"/>
+  </joint>
+
+</robot>

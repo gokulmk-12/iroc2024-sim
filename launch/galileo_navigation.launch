@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+  
+  <arg name="rvizconfig" default="$(find galileo_description)/rviz/galileo_navigation.rviz"/>
+
+  <!-- Localization and Mapping Launch File -->
+  <include file="$(find galileo_description)/launch/galileo_amcl.launch"/>
+  
+  <!-- Navigation Move Base Launch File -->
+  <include file="$(find galileo_description)/launch/galileo_move_base.launch"/>
+  
+  <node name="rviz" pkg="rviz" args="-d $(arg rvizconfig)" type="rviz" required="true"/>
+  
+</launch>

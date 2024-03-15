@@ -1,0 +1,275 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    
+    <material name="orange">
+        <color rgba="${255/255} ${108/255} ${10/255} 1"/>
+    </material>
+
+    <material name="black">
+        <color rgba="0 0 0 1"/>
+    </material>
+
+    <material name="white">
+        <color rgba="1 1 1 1"/>
+    </material>
+    
+    <link name="map"></link>
+    <link name="odom"></link>
+    
+    <joint name="world_joint" type="fixed">
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <parent link="map"/>
+        <child link="odom"/>
+    </joint>
+
+    <joint name="odom_joint" type="fixed">
+        <origin xyz="0.0 0.0 0.27" rpy="0.0 0.0 0.0"/>
+        <parent link="odom"/>
+        <child link="base_footprint"/>
+    </joint>
+
+    <link name="base_footprint"></link>
+
+    <joint name="base_joint" type="fixed">
+        <origin xyz="0.0 0.0 0.27" rpy="0.0 0.0 0.0"/>
+        <parent link="base_footprint"/>
+        <child link="base_link"/>
+    </joint>
+  
+    <link name="base_link">
+      <inertial>
+        <origin rpy="0 0 0" xyz="0.021963834758877466 -0.00016670469182376223 0.04894599334218868"/>
+        <mass value="1.9711450441063976"/>
+        <inertia ixx="0.004232" ixy="-4.2e-05" ixz="-0.000263" iyy="0.012667" iyz="2e-06" izz="0.016042"/>
+      </inertial>
+      <visual>
+        <origin rpy="0 0 ${pi/2}" xyz="0 0 0"></origin>
+        <geometry>
+            <mesh filename="package://galileo_description/meshes/Chassis.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="orange"/>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 ${pi/2}"/>
+        <geometry>
+            <mesh filename="package://galileo_description/meshes/Chassis.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+    
+    <link name="anveshak_logo">
+      <visual>
+        <pose>0.125 0 0 0 0 0</pose>
+            <geometry>
+                <box size="0.0001 0.35 0.35"/>
+            </geometry>
+            <material name="logo">
+	    	<texture filename="package://galileo_description/meshes/anveshak_logo/Anveshak.png"/>  
+            </material>            
+      </visual>
+    </link>
+      
+      <joint name="logo_joint" type="fixed">
+        <origin xyz="0.0 0.0 0.15" rpy="0.0 ${pi/2} 0.0"/>
+        <parent link="base_link"/>
+        <child link="anveshak_logo"/>
+    </joint>
+
+    <link name="left_bogie">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0.021963834758877466 -0.00016670469182376223 0.04894599334218868"/>
+            <mass value="1.0"/>
+            <inertia ixx="0.004232" ixy="-4.2e-05" ixz="-0.000263" iyy="0.012667" iyz="2e-06" izz="0.016042"/>
+        </inertial>
+        <visual>
+            <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="package://galileo_description/meshes/Bogie.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="white"/>
+        </visual>
+        <collision>
+            <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="package://galileo_description/meshes/Bogie.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="left_bogie_chassis_joint" type="revolute">
+        <parent link="base_link"/>
+        <child link="left_bogie"/>
+        <origin xyz="0 0.24 0.05" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+        <limit effort="30" velocity="1.0" lower="-0.0" upper="0.15" />
+    </joint>
+
+    <link name="right_bogie">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0.021963834758877466 -0.00016670469182376223 0.04894599334218868"/>
+            <mass value="1.0"/>
+            <inertia ixx="0.004232" ixy="-4.2e-05" ixz="-0.000263" iyy="0.012667" iyz="2e-06" izz="0.016042"/>
+        </inertial>
+        <visual>
+            <origin rpy="0 0 -${pi/2}" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="package://galileo_description/meshes/Bogie.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="white"/>
+        </visual>
+        <collision>
+            <origin rpy="0 0 -${pi/2}" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="package://galileo_description/meshes/Bogie.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="right_bogie_chassis_joint" type="revolute">
+        <parent link="base_link"/>
+        <child link="right_bogie"/>
+        <origin xyz="0 -0.24 0.05" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+        <limit effort="30" velocity="1.0" lower="-0.0" upper="0.15" />
+    </joint>
+
+    <link name="left_front_wheel">
+        <inertial>
+            <origin rpy="0 0 0" xyz="1.3877787807814457e-17 0.007499999999999993 6.938893903907228e-18"/>
+            <mass value="0.10956304379394399"/>
+            <inertia ixx="7.1e-05" ixy="0.0" ixz="0.0" iyy="0.000137" iyz="0.0" izz="7.1e-05"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 ${pi/2}"/>
+            <geometry>
+                <mesh filename="package://galileo_description/meshes/Wheel.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 ${pi/2}"/>
+            <geometry>
+                <mesh filename="package://galileo_description/meshes/Wheel.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="left_front_wheel_joint" type="continuous">
+        <parent link="left_bogie"/>
+        <child link="left_front_wheel"/>
+        <origin rpy="0.0 0.0 0.0" xyz="0.35 0.03 -0.2"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <link name="left_rear_wheel">
+        <inertial>
+            <origin rpy="0 0 0" xyz="1.3877787807814457e-17 0.007499999999999993 6.938893903907228e-18"/>
+            <mass value="0.10956304379394399"/>
+            <inertia ixx="7.1e-05" ixy="0.0" ixz="0.0" iyy="0.000137" iyz="0.0" izz="7.1e-05"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 ${pi/2}"/>
+            <geometry>
+                <mesh filename="package://galileo_description/meshes/Wheel.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 ${pi/2}"/>
+            <geometry>
+                <mesh filename="package://galileo_description/meshes/Wheel.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="left_rear_wheel_joint" type="continuous">
+        <parent link="left_bogie"/>
+        <child link="left_rear_wheel"/>
+        <origin rpy="0.0 0.0 0.0" xyz="-0.35 0.03 -0.2"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <link name="right_front_wheel">
+        <inertial>
+            <origin rpy="0 0 0" xyz="1.3877787807814457e-17 0.007499999999999993 6.938893903907228e-18"/>
+            <mass value="0.10956304379394399"/>
+            <inertia ixx="7.1e-05" ixy="0.0" ixz="0.0" iyy="0.000137" iyz="0.0" izz="7.1e-05"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 -${pi/2}"/>
+            <geometry>
+                <mesh filename="package://galileo_description/meshes/Wheel.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 -${pi/2}"/>
+            <geometry>
+                <mesh filename="package://galileo_description/meshes/Wheel.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="right_front_wheel_joint" type="continuous">
+        <parent link="right_bogie"/>
+        <child link="right_front_wheel"/>
+        <origin rpy="0.0 0.0 0.0" xyz="0.35 -0.03 -0.2"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <link name="right_rear_wheel">
+        <inertial>
+            <origin rpy="0 0 0" xyz="1.3877787807814457e-17 0.007499999999999993 6.938893903907228e-18"/>
+            <mass value="0.10956304379394399"/>
+            <inertia ixx="7.1e-05" ixy="0.0" ixz="0.0" iyy="0.000137" iyz="0.0" izz="7.1e-05"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 -${pi/2}"/>
+            <geometry>
+                <mesh filename="package://galileo_description/meshes/Wheel.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 -${pi/2}"/>
+            <geometry>
+                <mesh filename="package://galileo_description/meshes/Wheel.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="right_rear_wheel_joint" type="continuous">
+        <parent link="right_bogie"/>
+        <child link="right_rear_wheel"/>
+        <origin rpy="0.0 0.0 0.0" xyz="-0.35 -0.03 -0.2"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <link name="antenna">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0.021963834758877466 -0.00016670469182376223 0.04894599334218868"/>
+            <mass value="0.2"/>
+            <inertia ixx="0.004232" ixy="-4.2e-05" ixz="-0.000263" iyy="0.012667" iyz="2e-06" izz="0.016042"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <cylinder radius="0.02" length="0.5"/>
+            </geometry>
+            <material name="white"/>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <cylinder radius="0.02" length="0.5"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="antenna_joint" type="fixed">
+        <origin xyz="-0.25 -0.15 0.28" rpy="0.0 0.0 0.0"/>
+        <parent link="base_link"/>
+        <child link="antenna"/>
+    </joint>
+    
+</robot>

@@ -1,0 +1,9 @@
+map_type:              costmap
+obstacle_range:        2.5
+raytrace_range:        3.0
+transform_tolerance:   0.2
+footprint:             [[0.35, 0.27], [0.35, -0.27], [-0.35, 0.27], [-0.35, -0.27]]
+robot_radius:          0.45
+inflation_radius:      0.65
+observation_sources:   laser_scan_sensor # change this to point_cloud_sensor is camera is used
+laser_scan_sensor:     {sensor_frame: lidar_link, data_type: LaserScan, topic: /galileo/laser_scan, marking: true, clearing: true} # change link, type, topic accordingly

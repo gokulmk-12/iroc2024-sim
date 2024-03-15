@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="galileo">
+  <xacro:include filename="rover_core.xacro"/>
+  <xacro:include filename="rover.gazebo"/>
+  <xacro:include filename="rover.trans"/>
+
+  <link name="camera_link"></link>
+  
+  <link name="camera_link_optical">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.004999999999999977 0.0 0.0"/>
+      <mass value="0.00424"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="-0.0" iyy="0.0" iyz="-0.0" izz="0.0"/>
+    </inertial>
+    <visual name="">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://galileo_description/meshes/realsense.STL"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://galileo_description/meshes/realsense.STL"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="imu_link"></link>
+  <link name="gps_link"></link>
+
+  <link name="lidar_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.26693"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+          <cylinder radius="0.04" length="0.03"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0.0 0.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.08" length="0.05"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="camera_joint" type="fixed">
+    <origin xyz="0.31 0.0 0.1" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+  </joint>
+
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="camera_link"/>
+    <child link="camera_link_optical"/>
+    <origin xyz="0 0 0" rpy="-${pi/2} 0 ${pi/2}"/>
+  </joint>
+
+  <joint name="lidar_joint" type="fixed">
+    <origin xyz="0.21 0.0 0.165" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+  </joint>
+
+  <joint name="imu_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.165" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+  </joint>
+
+  <joint name="gps_joint" type="fixed">
+    <origin xyz="-0.1 0.0 0.165" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="gps_link"/>
+  </joint>
+
+</robot>
